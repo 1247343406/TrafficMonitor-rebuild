@@ -44,13 +44,13 @@ bool CCommon::GetFileContent(const wchar_t* file_path, string& contents_buff, bo
     if (file.fail())
         return false;
     //获取文件长度
-    file.seekg(0, file.end);
+    文件。seekg(0, file.end);
     size_t length = file.tellg();
-    file.seekg(0, file.beg);
+    文件。seekg(0, file.beg);
 
     char* buff = new char[length];
-    file.read(buff, length);
-    file.close();
+    文件。read(buff, length);
+    文件。close();
 
     contents_buff.assign(buff, length);
     delete[] buff;
@@ -89,25 +89,30 @@ CString CCommon::DataSizeToString(unsigned long long size, const PublicSettingDa
     case SpeedUnit::AUTO:
         if (cfg.speed_short_mode)
         {
-            if (size < 1024 * 10)                   //10KB以下以KB为单位，保留1位小数
+            if (size < 1024 * 10)                   //10KB以下以KB为单位，保留2位小数
+            {
+                value_str.Format(_T("%.2f"), size / 1024.0f);
+                unit_str = _T("KB");
+            }
+            else if (size < 1024 * 1000)            //1000KB以下以KB为单位，保留1位
             {
                 value_str.Format(_T("%.1f"), size / 1024.0f);
-                unit_str = _T("K");
+                unit_str = _T("KB");
             }
-            else if (size < 1024 * 1000)            //1000KB以下以KB为单位，保留整数
+            else if (size < 1024 * 1024 * 10)     //10MB以下以MB为单位，保留2位小数
             {
-                value_str.Format(_T("%.0f"), size / 1024.0f);
-                unit_str = _T("K");
+                value_str.Format(_T("%.2f"), size / 1024.0f / 1024.0f);
+                unit_str = _T("MB");
             }
             else if (size < 1024 * 1024 * 1000)     //1000MB以下以MB为单位，保留1位小数
             {
                 value_str.Format(_T("%.1f"), size / 1024.0f / 1024.0f);
-                unit_str = _T("M");
+                unit_str = _T("MB");
             }
             else
             {
                 value_str.Format(_T("%.2f"), size / 1024.0f / 1024.0f / 1024.0f);
-                unit_str = _T("G");
+                unit_str = _T("GB");
             }
         }
         else
